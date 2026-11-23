@@ -1,0 +1,21 @@
+[package]
+name = "karukan-skkserv"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.92"
+description = "skkserv-compatible dictionary server backed by the karukan conversion engine"
+license = "MIT"
+
+[workspace]
+
+[dependencies]
+karukan-engine = { git = "https://github.com/togatoga/karukan", rev = "2f0a00a1802538b668e11b49760d4a97f717b637" }
+karukan-im = { git = "https://github.com/togatoga/karukan", rev = "2f0a00a1802538b668e11b49760d4a97f717b637" }
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+encoding_rs = "0.8"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[profile.release]
+lto = "thin"

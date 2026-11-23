@@ -1,0 +1,5 @@
+# Rust build output
+/target/
+
+# Downloaded dictionary and model files
+/data/
