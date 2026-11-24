@@ -42,6 +42,37 @@ tar xzf dict.tgz -C ~/.local/share/karukan-im dict.bin
 HF_HOME=$PWD/data/hf ./target/release/karukan-skkserv --dict data/dl/dict.bin
 ```
 
+## 自動起動
+
+`scripts/` のスクリプトで、サーバーをユーザー単位のサービスとして登録できます。macOS では launchd の LaunchAgent、Linux では systemd のユーザーユニットとして登録します。
+
+```sh
+scripts/install-service.sh
+```
+
+実行ファイルは `--bin <PATH>`、`PATH` 上の `karukan-skkserv`（`cargo install --path .` でインストールしたものなど）、`target/release/karukan-skkserv` の順に探します。`--` より後ろの引数はそのままサーバーに渡します。サービスはリポジトリのディレクトリで動くわけではないので、パスは絶対パスで指定してください。
+
+```sh
+scripts/install-service.sh -- --port 11780 --dict "$HOME/dict.bin"
+```
+
+引数を変えるときは、スクリプトをもう一度実行してください。既存のサービスを上書きして再起動します。
+
+| OS    | サービスのファイル                                             | ログ                                    |
+| ----- | -------------------------------------------------------------- | --------------------------------------- |
+| macOS | `~/Library/LaunchAgents/io.github.xecua.karukan-skkserv.plist` | `~/Library/Logs/karukan-skkserv.log`    |
+| Linux | `~/.config/systemd/user/karukan-skkserv.service`               | `journalctl --user -u karukan-skkserv` |
+
+Linux ではログイン時に起動します。ログインせずにシステムの起動時から動かしたい場合は、`loginctl enable-linger $USER` を実行してください。
+
+サーバーを止めてサービスを削除するには、次のコマンドを実行します。
+
+```sh
+scripts/uninstall-service.sh
+```
+
+実行ファイル、辞書、モデル、ログは削除しません。
+
 ## クライアントの設定
 
 ### ddskk

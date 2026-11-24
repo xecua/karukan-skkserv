@@ -42,6 +42,37 @@ To keep the dictionary and model in the repository's `data/` directory, which Gi
 HF_HOME=$PWD/data/hf ./target/release/karukan-skkserv --dict data/dl/dict.bin
 ```
 
+## Starting automatically
+
+The scripts in `scripts/` register the server as a per-user service: a launchd LaunchAgent on macOS, and a systemd user unit on Linux.
+
+```sh
+scripts/install-service.sh
+```
+
+The script uses the first binary it finds among `--bin <PATH>`, `karukan-skkserv` on `PATH` (for example, installed with `cargo install --path .`), and `target/release/karukan-skkserv`. Arguments after `--` are passed to the server. Use absolute paths, because the service does not run in the repository directory.
+
+```sh
+scripts/install-service.sh -- --port 11780 --dict "$HOME/dict.bin"
+```
+
+To change the arguments, run the script again. It overwrites the existing service and restarts it.
+
+| OS    | Service file                                                 | Log                                     |
+| ----- | ------------------------------------------------------------ | --------------------------------------- |
+| macOS | `~/Library/LaunchAgents/io.github.xecua.karukan-skkserv.plist` | `~/Library/Logs/karukan-skkserv.log`    |
+| Linux | `~/.config/systemd/user/karukan-skkserv.service`              | `journalctl --user -u karukan-skkserv` |
+
+On Linux, the service starts when you log in. To start it at boot without logging in, run `loginctl enable-linger $USER`.
+
+To stop the server and remove the service:
+
+```sh
+scripts/uninstall-service.sh
+```
+
+The binary, dictionary, model, and log are left in place.
+
 ## Client configuration
 
 ### ddskk

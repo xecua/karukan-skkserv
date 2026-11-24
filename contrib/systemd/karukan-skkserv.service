@@ -1,0 +1,13 @@
+[Unit]
+Description=karukan-skkserv (skkserv-compatible dictionary server)
+Documentation=https://github.com/xecua/karukan-skkserv
+
+[Service]
+Type=simple
+ExecStart=@EXEC_START@
+Environment=NO_COLOR=1
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
