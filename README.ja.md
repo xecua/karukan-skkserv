@@ -2,9 +2,6 @@
 
 [English](README.md) | 日本語
 
-> [!WARNING]
-> このプロジェクトは AI によって生成されたものです。オーナーはコードを読んでいる途中であり、正確な動作は保証できません。
-
 [karukan](https://github.com/togatoga/karukan) のかな漢字変換エンジンを使う、skkserv 互換の辞書サーバーです。
 
 SKK クライアントから読みを受け取り、AI モデルの変換結果と karukan のシステム辞書の候補をまとめて返します。エンジンを直接組み込んでいるので、別のサーバーを立てる必要はありません。
@@ -74,19 +71,19 @@ echo 'K a n j i SPC RET' | skk -s 127.0.0.1:1178 -u /tmp/skk-test.dict
 
 ## オプション
 
-| オプション | 既定値 | 説明 |
-| --- | --- | --- |
-| `--host <HOST>` | `127.0.0.1` | 待ち受けるアドレス |
-| `-p`, `--port <PORT>` | `1178` | 待ち受けるポート |
-| `--encoding <ENCODING>` | `euc-jp` | 通信の文字コード（`euc-jp` または `utf8`） |
-| `--dict <DICT>` | karukan の設定 | システム辞書のパス |
-| `--model <MODEL>` | `conversion.model` | karukan の `[models]` にあるモデルのキー |
-| `--no-model` | | モデルを使わず、辞書だけで応答する |
-| `--model-candidates <N>` | `3` | 1 回の検索でモデルから得る候補数 |
-| `--max-candidates <N>` | `30` | 1 回の検索で返す候補の上限 |
-| `--timeout-ms <MS>` | `2000` | モデルの変換 1 回の制限時間（ミリ秒） |
-| `--threads <N>` | `conversion.n_threads` | 推論スレッド数 |
-| `--max-connections <N>` | `32` | 同時接続数の上限 |
+| オプション               | 既定値                 | 説明                                       |
+| ------------------------ | ---------------------- | ------------------------------------------ |
+| `--host <HOST>`          | `127.0.0.1`            | 待ち受けるアドレス                         |
+| `-p`, `--port <PORT>`    | `1178`                 | 待ち受けるポート                           |
+| `--encoding <ENCODING>`  | `euc-jp`               | 通信の文字コード（`euc-jp` または `utf8`） |
+| `--dict <DICT>`          | karukan の設定         | システム辞書のパス                         |
+| `--model <MODEL>`        | `conversion.model`     | karukan の `[models]` にあるモデルのキー   |
+| `--no-model`             |                        | モデルを使わず、辞書だけで応答する         |
+| `--model-candidates <N>` | `3`                    | 1 回の検索でモデルから得る候補数           |
+| `--max-candidates <N>`   | `30`                   | 1 回の検索で返す候補の上限                 |
+| `--timeout-ms <MS>`      | `2000`                 | モデルの変換 1 回の制限時間（ミリ秒）      |
+| `--threads <N>`          | `conversion.n_threads` | 推論スレッド数                             |
+| `--max-connections <N>`  | `32`                   | 同時接続数の上限                           |
 
 ログの詳細度は環境変数 `RUST_LOG` で変更できます（既定は `info`）。
 
