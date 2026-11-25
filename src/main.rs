@@ -81,7 +81,12 @@ fn load_dictionary(args: &Args, settings: &Settings) -> Option<Dictionary> {
     }
 }
 
-fn spawn_model_loader(backend: Arc<Backend>, settings: &Settings, key: String, threads: u32) -> Result<()> {
+fn spawn_model_loader(
+    backend: Arc<Backend>,
+    settings: &Settings,
+    key: String,
+    threads: u32,
+) -> Result<()> {
     let source = settings.model_source(&key)?;
     thread::spawn(move || {
         tracing::info!("loading model {key}");
@@ -105,7 +110,12 @@ impl Drop for ConnectionSlot {
     }
 }
 
-fn handle(stream: TcpStream, backend: &Backend, encoding: &'static Encoding, host: &str) -> std::io::Result<()> {
+fn handle(
+    stream: TcpStream,
+    backend: &Backend,
+    encoding: &'static Encoding,
+    host: &str,
+) -> std::io::Result<()> {
     stream.set_nodelay(true)?;
     let mut writer = stream.try_clone()?;
     let mut reader = BufReader::new(stream);
@@ -142,7 +152,10 @@ fn main() -> Result<()> {
         Duration::from_millis(args.timeout_ms),
     ));
     if !args.no_model {
-        let key = args.model.clone().unwrap_or_else(|| settings.conversion.model.clone());
+        let key = args
+            .model
+            .clone()
+            .unwrap_or_else(|| settings.conversion.model.clone());
         let threads = args.threads.unwrap_or(settings.conversion.n_threads);
         spawn_model_loader(Arc::clone(&backend), &settings, key, threads)?;
     }

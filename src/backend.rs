@@ -187,13 +187,20 @@ impl Lookup for Backend {
             .dictionary
             .as_ref()
             .and_then(|dict| dict.exact_match_search(&query.kana));
-        let katakana = query.okuri.is_none().then(|| hiragana_to_katakana(&query.kana));
+        let katakana = query
+            .okuri
+            .is_none()
+            .then(|| hiragana_to_katakana(&query.kana));
 
         let sources = model
             .iter()
             .flatten()
             .map(String::as_str)
-            .chain(dictionary.iter().flat_map(|hit| hit.candidates.iter().map(|c| c.surface.as_str())))
+            .chain(
+                dictionary
+                    .iter()
+                    .flat_map(|hit| hit.candidates.iter().map(|c| c.surface.as_str())),
+            )
             .chain(katakana.as_deref());
         let merged = merge_candidates(&query, sources, self.max_candidates);
 
@@ -229,17 +236,34 @@ mod tests {
     fn parses_okuri_nasi_and_ari() {
         assert_eq!(
             parse_query("かんじ"),
-            Some(Query { kana: "かんじ".into(), okuri: None })
+            Some(Query {
+                kana: "かんじ".into(),
+                okuri: None
+            })
         );
         assert_eq!(
             parse_query("かk"),
-            Some(Query { kana: "かく".into(), okuri: Some("く") })
+            Some(Query {
+                kana: "かく".into(),
+                okuri: Some("く")
+            })
         );
     }
 
     #[test]
     fn non_kana_keys_never_reach_the_model() {
-        for key in ["github", "#1", "だい#", ">てき", "かき>", "カンジ", "漢字", "k", "", "かq"] {
+        for key in [
+            "github",
+            "#1",
+            "だい#",
+            ">てき",
+            "かき>",
+            "カンジ",
+            "漢字",
+            "k",
+            "",
+            "かq",
+        ] {
             assert_eq!(parse_query(key), None, "{key}");
         }
     }
