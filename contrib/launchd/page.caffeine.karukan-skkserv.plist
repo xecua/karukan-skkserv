@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>io.github.xecua.karukan-skkserv</string>
+	<string>page.caffeine.karukan-skkserv</string>
 	<key>ProgramArguments</key>
 	<array>
 @PROGRAM_ARGUMENTS@

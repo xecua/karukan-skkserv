@@ -4,7 +4,7 @@
 set -euo pipefail
 
 NAME=karukan-skkserv
-LABEL=io.github.xecua.karukan-skkserv
+LABEL=page.caffeine.karukan-skkserv
 
 uninstall_launchd() {
 	local plist=$HOME/Library/LaunchAgents/$LABEL.plist

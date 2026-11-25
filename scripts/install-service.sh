@@ -9,7 +9,7 @@
 set -euo pipefail
 
 NAME=karukan-skkserv
-LABEL=io.github.xecua.karukan-skkserv
+LABEL=page.caffeine.karukan-skkserv
 REPO_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 
 usage() {

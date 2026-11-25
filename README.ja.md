@@ -60,7 +60,7 @@ scripts/install-service.sh -- --port 11780 --dict "$HOME/dict.bin"
 
 | OS    | サービスのファイル                                             | ログ                                    |
 | ----- | -------------------------------------------------------------- | --------------------------------------- |
-| macOS | `~/Library/LaunchAgents/io.github.xecua.karukan-skkserv.plist` | `~/Library/Logs/karukan-skkserv.log`    |
+| macOS | `~/Library/LaunchAgents/page.caffeine.karukan-skkserv.plist`   | `~/Library/Logs/karukan-skkserv.log`    |
 | Linux | `~/.config/systemd/user/karukan-skkserv.service`               | `journalctl --user -u karukan-skkserv` |
 
 Linux ではログイン時に起動します。ログインせずにシステムの起動時から動かしたい場合は、`loginctl enable-linger $USER` を実行してください。

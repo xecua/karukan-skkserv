@@ -60,7 +60,7 @@ To change the arguments, run the script again. It overwrites the existing servic
 
 | OS    | Service file                                                 | Log                                     |
 | ----- | ------------------------------------------------------------ | --------------------------------------- |
-| macOS | `~/Library/LaunchAgents/io.github.xecua.karukan-skkserv.plist` | `~/Library/Logs/karukan-skkserv.log`    |
+| macOS | `~/Library/LaunchAgents/page.caffeine.karukan-skkserv.plist`   | `~/Library/Logs/karukan-skkserv.log`    |
 | Linux | `~/.config/systemd/user/karukan-skkserv.service`              | `journalctl --user -u karukan-skkserv` |
 
 On Linux, the service starts when you log in. To start it at boot without logging in, run `loginctl enable-linger $USER`.
