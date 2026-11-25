@@ -9,6 +9,7 @@
 //! | `4<prefix> ` | completion | same as lookup                    |
 
 use encoding_rs::Encoding;
+use std::fmt::Write as _;
 use std::io::{self, BufRead, Write};
 
 const MAX_KEY_BYTES: usize = 1024;
@@ -93,7 +94,8 @@ pub fn escape_candidate(candidate: &str) -> Option<String> {
     for c in candidate.chars() {
         match c {
             '/' | ';' | '"' | '\\' | '(' | ')' => {
-                escaped.push_str(&format!("\\{:03o}", c as u32));
+                // Writing to a String cannot fail.
+                let _ = write!(escaped, "\\{:03o}", u32::from(c));
             }
             _ => escaped.push(c),
         }
@@ -125,16 +127,15 @@ pub fn encode_candidates(candidates: &[String], encoding: &'static Encoding) -> 
 fn write_key_response<W: Write>(
     writer: &mut W,
     key: &[u8],
-    candidates: Vec<String>,
+    candidates: &[String],
     encoding: &'static Encoding,
 ) -> io::Result<()> {
-    match encode_candidates(&candidates, encoding) {
-        Some(line) => writer.write_all(&line),
-        None => {
-            writer.write_all(b"4")?;
-            writer.write_all(key)?;
-            writer.write_all(b" \n")
-        }
+    if let Some(line) = encode_candidates(candidates, encoding) {
+        writer.write_all(&line)
+    } else {
+        writer.write_all(b"4")?;
+        writer.write_all(key)?;
+        writer.write_all(b" \n")
     }
 }
 
@@ -155,7 +156,7 @@ where
     let decode = |key: &[u8]| {
         encoding
             .decode_without_bom_handling_and_without_replacement(key)
-            .map(|text| text.into_owned())
+            .map(std::borrow::Cow::into_owned)
     };
     while let Some(request) = read_request(reader)? {
         match request {
@@ -164,11 +165,11 @@ where
             Request::Host => writer.write_all(format!("{host}: ").as_bytes())?,
             Request::Lookup(key) => {
                 let candidates = decode(&key).map_or_else(Vec::new, |k| backend.lookup(&k));
-                write_key_response(writer, &key, candidates, encoding)?;
+                write_key_response(writer, &key, &candidates, encoding)?;
             }
             Request::Complete(key) => {
                 let candidates = decode(&key).map_or_else(Vec::new, |k| backend.complete(&k));
-                write_key_response(writer, &key, candidates, encoding)?;
+                write_key_response(writer, &key, &candidates, encoding)?;
             }
         }
         writer.flush()?;

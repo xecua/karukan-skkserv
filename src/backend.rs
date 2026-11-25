@@ -177,7 +177,11 @@ impl Lookup for Backend {
         let Some(query) = parse_query(reading) else {
             return Vec::new();
         };
-        let lock_cache = || self.cache.lock().unwrap_or_else(|e| e.into_inner());
+        let lock_cache = || {
+            self.cache
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner)
+        };
         if let Some(hit) = lock_cache().entries.get(reading) {
             return hit.clone();
         }

@@ -55,7 +55,7 @@ struct Args {
     /// Time budget for one model conversion, in milliseconds
     #[arg(long, default_value_t = 2000)]
     timeout_ms: u64,
-    /// Inference threads [default: conversion.n_threads]
+    /// Inference threads [default: `conversion.n_threads`]
     #[arg(long)]
     threads: Option<u32>,
     /// Maximum simultaneous client connections
